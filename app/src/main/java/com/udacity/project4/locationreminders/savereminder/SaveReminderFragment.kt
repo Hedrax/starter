@@ -67,7 +67,13 @@ class SaveReminderFragment : BaseFragment() {
                 Geofence.GEOFENCE_TRANSITION_ENTER or Geofence.GEOFENCE_TRANSITION_EXIT)
             val pendingIntent: PendingIntent? = geoBuilder.getPendingIntent()
             val geofenceRequest: GeofencingRequest = geoBuilder.getGeofencingRequest(geofence)
-
+            LocationServices.getGeofencingClient(context!!)
+                .addGeofences(geofenceRequest, pendingIntent)
+                .addOnSuccessListener{_viewModel.showToast.value = "GeoFence added"}
+                .addOnFailureListener{
+                    Log.d(TAG, "Geofence Failed: ${it.message}")
+                    _viewModel.showToast.value = "Give Location permission"
+                }
         }
         catch (e:Exception){
             Log.i(TAG, "geofence")
