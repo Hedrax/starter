@@ -80,6 +80,7 @@ class SaveReminderFragment : BaseFragment() {
                     _viewModel.showToast.value = "Give Location permission"
                 }
         }
+
         catch (e:Exception){
             Log.i(TAG, "geofence")
         }
