@@ -42,6 +42,7 @@ class SaveReminderFragment : BaseFragment() {
         _viewModel.navigate.observe(viewLifecycleOwner, androidx.lifecycle.Observer {
             if (it) findNavController().navigateUp()
         })
+        geoBuilder = GeofenceUtils(context)
         return binding.root
     }
 
