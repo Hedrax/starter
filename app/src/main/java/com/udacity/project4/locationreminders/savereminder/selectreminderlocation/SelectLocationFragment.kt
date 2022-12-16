@@ -2,6 +2,7 @@ package com.udacity.project4.locationreminders.savereminder.selectreminderlocati
 
 
 import android.Manifest
+import android.annotation.TargetApi
 import android.content.pm.PackageManager
 import android.os.Bundle
 import android.util.Log
@@ -138,9 +139,21 @@ class SelectLocationFragment : BaseFragment(),OnMapReadyCallback {
             Log.i(TAG,"REquestForeground permission ")
         }
     }
+    //checks the API level and  based on that checks for background permissions for geofence
+    @TargetApi(29)
+    private fun requestBackgroundLocationPermissions() {
+        Log.i(TAG,"REquest ")
+        ActivityCompat.requestPermissions(
+            this.activity!!,
+            arrayOf<String>(Manifest.permission.ACCESS_BACKGROUND_LOCATION),
+            REQUEST_BACKGROUND_LOCATION
+        )
+        Log.d(TAG, "BackGround access")
+    }
     companion object{
         const val TAG = "Select_Fragment"
         const val REQUEST_LOCATION_PERMISSION = 112
+        const val REQUEST_BACKGROUND_LOCATION = 113
     }
 
 }
