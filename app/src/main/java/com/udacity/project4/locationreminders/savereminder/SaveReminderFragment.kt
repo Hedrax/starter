@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
+import androidx.navigation.fragment.findNavController
 import com.udacity.project4.R
 import com.udacity.project4.base.BaseFragment
 import com.udacity.project4.base.NavigationCommand
@@ -20,7 +21,7 @@ class SaveReminderFragment : BaseFragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         binding =
             DataBindingUtil.inflate(inflater, R.layout.fragment_save_reminder, container, false)
 
@@ -28,6 +29,9 @@ class SaveReminderFragment : BaseFragment() {
 
         binding.viewModel = _viewModel
 
+        _viewModel.navigate.observe(viewLifecycleOwner, androidx.lifecycle.Observer {
+            if (it) findNavController().navigateUp()
+        })
         return binding.root
     }
 
