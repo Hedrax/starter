@@ -26,7 +26,6 @@ class SaveReminderViewModel(val app: Application, val dataSource: ReminderDataSo
     val navigate: LiveData<Boolean>
         get() = _navigate
 
-
     /**
      * Clear the live data objects to start fresh next time the view model gets called
      */
