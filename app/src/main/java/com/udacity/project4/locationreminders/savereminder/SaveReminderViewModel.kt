@@ -6,7 +6,6 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.Marker
-import com.google.android.gms.maps.model.PointOfInterest
 import com.udacity.project4.R
 import com.udacity.project4.base.BaseViewModel
 import com.udacity.project4.base.NavigationCommand
@@ -34,7 +33,15 @@ class SaveReminderViewModel(val app: Application, val dataSource: ReminderDataSo
 
     }
 
-
+    fun save() {
+        showLoading.value = true
+        if (checkValidity()) {
+            appendData()
+            saveFlag
+            _navigate.value = true
+            onClear()
+        }
+    }
     //fn to receive the incoming selected position from location selection fragment
     fun setPosition(value: Marker) {
         selectedPosition.value = value
