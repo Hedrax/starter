@@ -24,13 +24,30 @@ class AuthenticationActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_authentication)
-//         TODO: Implement the create account and sign in using FirebaseUI, use sign in using email and sign in using Google
 
-//          TODO: If the user was authenticated, send him to RemindersActivity
+        //TODO signin flow  & clean up the setcontent view
 
-//          TODO: a bonus is to customize the sign in flow to look nice using :
-        //https://github.com/firebase/FirebaseUI-Android/blob/master/auth/README.md#custom-layout
+    }
 
-
+    //the function checks for authentication if true he will send the user to reminder fragment
+    // if false (not Authenticated) it will through an toast (sign in failed) and Log (debugging purpose)
+    override fun onActivityResult(requestingCode: Int, resultingCode: Int, intent: Intent?) {
+        super.onActivityResult(requestingCode, resultingCode, intent)
+        if (requestingCode == SIGN_IN_CODE) {
+            val response = IdpResponse.fromResultIntent(intent)
+            if (resultingCode == Activity.RESULT_OK) {
+                Toast.makeText(this, "SignIn Successfully", Toast.LENGTH_SHORT).show()
+                Log.i(
+                    TAG, "Sign in Success ${
+                        FirebaseAuth.getInstance().currentUser?.displayName
+                    }"
+                )
+                startActivity(Intent(this, RemindersActivity::class.java))
+                finish()
+            } else {
+                Toast.makeText(this, "SignIn Failed", Toast.LENGTH_SHORT).show()
+                Log.i(TAG, "Error in signing in ${response?.error?.errorCode}")
+            }
+        }
     }
 }
