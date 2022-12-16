@@ -75,6 +75,15 @@ class SelectLocationFragment : BaseFragment(),OnMapReadyCallback {
         return binding.root
     }
 
+    //the fn handles what to be done when adding marker and update the location selected variable to
+    //be added to the save reminder fragment
+    private fun setPoiClk(map: GoogleMap) {
+        try {
+
+        }catch (e:Exception){
+            Log.i(TAG, "set POI click")
+        }
+    }
 
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
