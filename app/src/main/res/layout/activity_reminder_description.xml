@@ -16,18 +16,49 @@
         android:gravity="center"
         android:orientation="vertical"
         tools:context=".locationreminders.ReminderDescriptionActivity">
-        <!--TODO: add the design of the reminder details-->
 
         <TextView
+            android:id="@+id/title"
+            android:gravity="center"
+            android:text="@{reminderDataItem.title}"
+            android:textColor="@color/black"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="center"
-            android:text="Reminder Details"
+            android:layout_marginTop="12dp"
             android:textSize="@dimen/text_size_large"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
+        <TextView
+            android:id="@+id/locationSelect"
+            android:hint="@string/reminder_location"
+            android:text="@{reminderDataItem.location}"
+            android:textColor="@color/black"
+            android:gravity="center_vertical"
+            android:clickable="true"
+            android:layout_marginTop="12dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:focusable="true"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/reminderDescription"
+            app:drawableStartCompat="@drawable/ic_location"
+            app:drawableLeftCompat="@drawable/ic_location" />
+
+        <TextView
+            android:id="@+id/description"
+            android:text="@{reminderDataItem.description}"
+            android:gravity="center"
+            android:layout_marginTop="12dp"
+            android:textColor="@color/black"
+            android:textSize="@dimen/text_size_large"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
     </LinearLayout>
 </layout>
