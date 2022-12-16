@@ -6,6 +6,7 @@ import android.content.pm.PackageManager
 import android.os.Bundle
 import android.util.Log
 import android.view.*
+import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
 import androidx.navigation.fragment.findNavController
@@ -125,8 +126,21 @@ class SelectLocationFragment : BaseFragment(),OnMapReadyCallback {
          Manifest.permission.ACCESS_FINE_LOCATION
      ) == PackageManager.PERMISSION_GRANTED
  }
+//requests location ForeGround Permission
+    private fun requestForeGroundLocationPermission(){
+        try {
+            ActivityCompat.requestPermissions(
+                requireActivity(),
+                arrayOf<String>(Manifest.permission.ACCESS_FINE_LOCATION),
+                REQUEST_LOCATION_PERMISSION
+            )
+        }catch (e:Exception){
+            Log.i(TAG,"REquestForeground permission ")
+        }
+    }
     companion object{
-    const val TAG = "Select_Fragment"
+        const val TAG = "Select_Fragment"
+        const val REQUEST_LOCATION_PERMISSION = 112
     }
 
 }
