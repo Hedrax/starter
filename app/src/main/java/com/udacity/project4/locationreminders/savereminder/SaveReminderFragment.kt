@@ -57,6 +57,19 @@ class SaveReminderFragment : BaseFragment() {
         //make sure to clear the view model after destroy, as it's a single view model.
         _viewModel.onClear()
     }
+    //fn that adds the geofence it gives a log and toast in case of failure
+    @SuppressLint("MissingPermission")
+    private fun addGeofence(latLng: LatLng,radius: Float = 200f) {
+        try{
+            val geoId: String = UUID.randomUUID().toString()
+            val geofence: Geofence = geoBuilder.buildGeofence(geoId,latLng,radius,
+                Geofence.GEOFENCE_TRANSITION_ENTER or Geofence.GEOFENCE_TRANSITION_EXIT)
+
+        }
+        catch (e:Exception){
+            Log.i(TAG, "geofence")
+        }
+    }
     companion object {
         const val TAG = "SaveReminderFrag"
     }
