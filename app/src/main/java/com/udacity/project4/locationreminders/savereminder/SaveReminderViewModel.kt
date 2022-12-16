@@ -77,4 +77,12 @@ class SaveReminderViewModel(val app: Application, val dataSource: ReminderDataSo
         navigationCommand.value = NavigationCommand
             .To(SaveReminderFragmentDirections.actionSaveReminderFragmentToSelectLocationFragment())
     }
+
+    fun getLocation() : LatLng? {
+        return selectedPosition.value?.position?.let {
+            LatLng(
+                it.latitude,
+                it.longitude)
+        }
+    }
 }
