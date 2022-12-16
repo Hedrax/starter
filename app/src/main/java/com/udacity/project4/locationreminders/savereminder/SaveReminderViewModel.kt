@@ -72,4 +72,9 @@ class SaveReminderViewModel(val app: Application, val dataSource: ReminderDataSo
         showLoading.value = false
         navigationCommand.value = NavigationCommand.Back
     }
+    //navigation fn
+    fun navigateToSelectLocation() {
+        navigationCommand.value = NavigationCommand
+            .To(SaveReminderFragmentDirections.actionSaveReminderFragmentToSelectLocationFragment())
+    }
 }
