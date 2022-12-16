@@ -82,7 +82,8 @@ class SelectLocationFragment : BaseFragment(),OnMapReadyCallback {
             map.setOnPoiClickListener { poi ->
                 val poiMarker =
                     map.addMarker(MarkerOptions().position(poi.latLng).title(poi.name))
-
+                poiMarker.showInfoWindow()
+                map.moveCamera(CameraUpdateFactory.newLatLngZoom(poi.latLng, 15F))
             }
         }catch (e:Exception){
             Log.i(TAG, "set POI click")
