@@ -57,4 +57,19 @@ class SaveReminderViewModel(val app: Application, val dataSource: ReminderDataSo
         }
         return true
     }
+    //saving to dataBase process
+    private fun appendData() {
+        showLoading.value = true
+        viewModelScope.launch {
+            dataSource.saveReminder(ReminderDTO(
+                title = title.value,
+                location = positionStr,
+                description = description.value,
+                latitude = selectedPosition.value?.position?.latitude,
+                longitude = selectedPosition.value?.position?.longitude
+            ))
+        }
+        showLoading.value = false
+        navigationCommand.value = NavigationCommand.Back
+    }
 }
