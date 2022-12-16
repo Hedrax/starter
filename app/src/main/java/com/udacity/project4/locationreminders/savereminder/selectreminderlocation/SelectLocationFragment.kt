@@ -29,7 +29,7 @@ import com.udacity.project4.locationreminders.savereminder.SaveReminderViewModel
 import com.udacity.project4.utils.setDisplayHomeAsUpEnabled
 import org.koin.android.ext.android.inject
 
-class SelectLocationFragment : BaseFragment() {
+class SelectLocationFragment : BaseFragment(),OnMapReadyCallback {
 
     //Use Koin to get the view model of the SaveReminder
     override val _viewModel: SaveReminderViewModel by inject()
@@ -37,7 +37,7 @@ class SelectLocationFragment : BaseFragment() {
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         binding =
             DataBindingUtil.inflate(inflater, R.layout.fragment_select_location, container, false)
 
@@ -85,6 +85,10 @@ class SelectLocationFragment : BaseFragment() {
             true
         }
         else -> super.onOptionsItemSelected(item)
+    }
+
+    override fun onMapReady(map: GoogleMap?) {
+        TODO("Not yet implemented")
     }
 
 
