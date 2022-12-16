@@ -66,9 +66,6 @@ class SelectLocationFragment : BaseFragment(),OnMapReadyCallback {
             }
         }
 //        TODO: zoom to the user location after taking his permission
-//        TODO: add style to the map
-//        TODO: put a marker to location that the user selected
-
 
 //        TODO: call this function after the user confirms on the selected location
 
@@ -92,6 +89,15 @@ class SelectLocationFragment : BaseFragment(),OnMapReadyCallback {
         }
     }
 
+    //responsible for styling the current map with styling in the JSON file Map_styling.json
+    private fun mapStyling(map: GoogleMap) {
+        try {
+            map.setMapStyle(MapStyleOptions.loadRawResourceStyle(context,R.raw.map_styling))
+        }
+        catch (e:Exception){
+            Log.i(TAG, "set map style = ${e.message}")
+        }
+    }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         inflater.inflate(R.menu.map_options, menu)
