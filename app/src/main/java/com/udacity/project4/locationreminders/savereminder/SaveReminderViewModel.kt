@@ -45,4 +45,16 @@ class SaveReminderViewModel(val app: Application, val dataSource: ReminderDataSo
         selectedPosition.value?.title = value.location
         selectedPosition.value?.position = LatLng(value.latitude!!,value.longitude!!)
     }
+    //check if the title is not null and a position has been selected
+    private fun checkValidity(): Boolean {
+        if ((title.value == null) || (title.value == "")) {
+            showSnackBarInt.value = R.string.missing_title
+            return false
+        }
+        if (selectedPosition.value == null) {
+            showSnackBarInt.value = R.string.missing_location
+            return false
+        }
+        return true
+    }
 }
