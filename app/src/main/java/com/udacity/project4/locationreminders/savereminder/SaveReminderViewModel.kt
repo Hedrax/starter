@@ -1,8 +1,10 @@
 package com.udacity.project4.locationreminders.savereminder
 
 import android.app.Application
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
+import com.google.android.gms.maps.model.Marker
 import com.google.android.gms.maps.model.PointOfInterest
 import com.udacity.project4.R
 import com.udacity.project4.base.BaseViewModel
@@ -14,23 +16,21 @@ import kotlinx.coroutines.launch
 
 class SaveReminderViewModel(val app: Application, val dataSource: ReminderDataSource) :
     BaseViewModel(app) {
-    val reminderTitle = MutableLiveData<String>()
-    val reminderDescription = MutableLiveData<String>()
-    val reminderSelectedLocationStr = MutableLiveData<String>()
-    val selectedPOI = MutableLiveData<PointOfInterest>()
-    val latitude = MutableLiveData<Double>()
-    val longitude = MutableLiveData<Double>()
+    private val selectedPosition = MutableLiveData<Marker?>(null)
+    val title = MutableLiveData<String?>(null)
+    val description = MutableLiveData<String>()
+    val positionStr: String
+        get() = selectedPosition.value?.title.toString()
+    val saveFlag = MutableLiveData<Boolean>()
+    private val _navigate = MutableLiveData<Boolean>(false)
+    val navigate: LiveData<Boolean>
+        get() = _navigate
 
     /**
      * Clear the live data objects to start fresh next time the view model gets called
      */
     fun onClear() {
-        reminderTitle.value = null
-        reminderDescription.value = null
-        reminderSelectedLocationStr.value = null
-        selectedPOI.value = null
-        latitude.value = null
-        longitude.value = null
+
     }
 
     /**
