@@ -30,9 +30,17 @@ class SaveReminderViewModel(val app: Application, val dataSource: ReminderDataSo
      * Clear the live data objects to start fresh next time the view model gets called
      */
     fun onClear() {
-
+        selectedPosition.value = null
+        title.value = null
+        saveFlag.value = false
+        _navigate.value = false
     }
-
+    init{
+        title.value = null
+        description.value = ""
+        saveFlag.value = false
+        selectedPosition.value = null
+    }
     fun save() {
         showLoading.value = true
         if (checkValidity()) {
