@@ -44,6 +44,11 @@ class SaveReminderFragment : BaseFragment() {
             if (it) findNavController().navigateUp()
         })
         geoBuilder = GeofenceUtils(context)
+        //observer on saveFlag liveData when we're saving the data he will cause adding geofence
+        _viewModel.saveFlag.observe(viewLifecycleOwner, androidx.lifecycle.Observer {
+            if(it) _viewModel.getLocation()?.let { it1 -> addGeofence(it1)}
+
+        })
         return binding.root
     }
 
