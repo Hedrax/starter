@@ -15,7 +15,6 @@ import com.google.android.gms.location.LocationServices
 import com.google.android.gms.maps.model.LatLng
 import com.udacity.project4.R
 import com.udacity.project4.base.BaseFragment
-import com.udacity.project4.base.NavigationCommand
 import com.udacity.project4.databinding.FragmentSaveReminderBinding
 import com.udacity.project4.locationreminders.geofence.GeofenceUtils
 import com.udacity.project4.utils.setDisplayHomeAsUpEnabled
@@ -80,7 +79,6 @@ class SaveReminderFragment : BaseFragment() {
                     _viewModel.showToast.value = "Give Location permission"
                 }
         }
-
         catch (e:Exception){
             Log.i(TAG, "geofence")
         }
