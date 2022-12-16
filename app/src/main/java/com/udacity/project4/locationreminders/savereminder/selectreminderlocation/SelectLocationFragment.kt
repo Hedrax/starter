@@ -12,6 +12,7 @@ import android.util.Log
 import android.view.*
 import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
+import androidx.navigation.fragment.findNavController
 import com.google.android.gms.common.api.ApiException
 import com.google.android.gms.common.api.ResolvableApiException
 import com.google.android.gms.location.*
@@ -35,6 +36,7 @@ class SelectLocationFragment : BaseFragment(),OnMapReadyCallback {
     override val _viewModel: SaveReminderViewModel by inject()
     private lateinit var binding: FragmentSelectLocationBinding
 
+    private var reminderLocation:Marker? = null
     private lateinit var map: GoogleMap
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
