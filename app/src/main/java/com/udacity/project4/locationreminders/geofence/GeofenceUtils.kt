@@ -6,10 +6,10 @@ import android.content.Context
 import android.content.ContextWrapper
 import android.content.Intent
 import com.google.android.gms.location.Geofence
+import com.google.android.gms.location.GeofencingRequest
 import com.google.android.gms.maps.model.LatLng
 
 class GeofenceUtils(context: Context?):ContextWrapper(context) {
-    //TODO - handleRequest
     private var pendingIntent: PendingIntent? = null
 
     fun buildGeofence(ID: String, latLng: LatLng, rad: Float, type: Int): Geofence {
@@ -32,5 +32,12 @@ class GeofenceUtils(context: Context?):ContextWrapper(context) {
         return pendingIntent
     }
 
+    fun getGeofencingRequest(geofence: Geofence?): GeofencingRequest {
+        return GeofencingRequest
+            .Builder()
+            .setInitialTrigger(GeofencingRequest.INITIAL_TRIGGER_ENTER)
+            .addGeofence(geofence)
+            .build()
+    }
 
 }
