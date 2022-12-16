@@ -71,16 +71,10 @@ class SelectLocationFragment : BaseFragment(),OnMapReadyCallback {
 
 
 //        TODO: call this function after the user confirms on the selected location
-        onLocationSelected()
 
         return binding.root
     }
 
-    private fun onLocationSelected() {
-        //        TODO: When the user confirms on the selected location,
-        //         send back the selected location details to the view model
-        //         and navigate back to the previous fragment to save the reminder and add the geofence
-    }
 
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
@@ -110,6 +104,8 @@ class SelectLocationFragment : BaseFragment(),OnMapReadyCallback {
     override fun onMapReady(googleMap: GoogleMap) {
         map = googleMap
     }
-
+    companion object{
+    const val TAG = "Select_Fragment"
+    }
 
 }
