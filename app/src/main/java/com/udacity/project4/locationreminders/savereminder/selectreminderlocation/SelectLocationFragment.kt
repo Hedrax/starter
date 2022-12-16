@@ -79,7 +79,11 @@ class SelectLocationFragment : BaseFragment(),OnMapReadyCallback {
     //be added to the save reminder fragment
     private fun setPoiClk(map: GoogleMap) {
         try {
+            map.setOnPoiClickListener { poi ->
+                val poiMarker =
+                    map.addMarker(MarkerOptions().position(poi.latLng).title(poi.name))
 
+            }
         }catch (e:Exception){
             Log.i(TAG, "set POI click")
         }
