@@ -4,6 +4,7 @@ import android.app.Application
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
+import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.Marker
 import com.google.android.gms.maps.model.PointOfInterest
 import com.udacity.project4.R
@@ -33,50 +34,15 @@ class SaveReminderViewModel(val app: Application, val dataSource: ReminderDataSo
 
     }
 
-    /**
-     * Validate the entered data then saves the reminder data to the DataSource
-     */
-    fun validateAndSaveReminder(reminderData: ReminderDataItem) {
-        if (validateEnteredData(reminderData)) {
-            saveReminder(reminderData)
-        }
+
+    //fn to receive the incoming selected position from location selection fragment
+    fun setPosition(value: Marker) {
+        selectedPosition.value = value
     }
-
-    /**
-     * Save the reminder to the data source
-     */
-    fun saveReminder(reminderData: ReminderDataItem) {
-        showLoading.value = true
-        viewModelScope.launch {
-            dataSource.saveReminder(
-                ReminderDTO(
-                    reminderData.title,
-                    reminderData.description,
-                    reminderData.location,
-                    reminderData.latitude,
-                    reminderData.longitude,
-                    reminderData.id
-                )
-            )
-            showLoading.value = false
-            showToast.value = app.getString(R.string.reminder_saved)
-            navigationCommand.value = NavigationCommand.Back
-        }
-    }
-
-    /**
-     * Validate the entered data and show error to the user if there's any invalid data
-     */
-    fun validateEnteredData(reminderData: ReminderDataItem): Boolean {
-        if (reminderData.title.isNullOrEmpty()) {
-            showSnackBarInt.value = R.string.err_enter_title
-            return false
-        }
-
-        if (reminderData.location.isNullOrEmpty()) {
-            showSnackBarInt.value = R.string.err_select_location
-            return false
-        }
-        return true
+    //simple setter fn for easy translation from ReminderDTO to position
+    fun setPositionReminder(value: ReminderDataItem) {
+        title.value = value.title
+        selectedPosition.value?.title = value.location
+        selectedPosition.value?.position = LatLng(value.latitude!!,value.longitude!!)
     }
 }
