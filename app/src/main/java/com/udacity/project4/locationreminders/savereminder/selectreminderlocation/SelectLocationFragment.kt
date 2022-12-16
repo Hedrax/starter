@@ -55,6 +55,16 @@ class SelectLocationFragment : BaseFragment(),OnMapReadyCallback {
             .findFragmentById(R.id.map) as SupportMapFragment
         mapFragment.getMapAsync(this)
 
+        // the one click listener to the save button will check if user selected location or not
+        binding.saveButton.setOnClickListener {
+            if(reminderLocation != null){
+                _viewModel.setPosition(reminderLocation!!)
+                findNavController().navigateUp()
+            }
+            else{
+                _viewModel.showToast.value = getString(R.string.missing_location)
+            }
+        }
 //        TODO: zoom to the user location after taking his permission
 //        TODO: add style to the map
 //        TODO: put a marker to location that the user selected
