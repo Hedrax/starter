@@ -35,6 +35,7 @@ class SelectLocationFragment : BaseFragment(),OnMapReadyCallback {
     override val _viewModel: SaveReminderViewModel by inject()
     private lateinit var binding: FragmentSelectLocationBinding
 
+    private lateinit var map: GoogleMap
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
@@ -47,7 +48,11 @@ class SelectLocationFragment : BaseFragment(),OnMapReadyCallback {
         setHasOptionsMenu(true)
         setDisplayHomeAsUpEnabled(true)
 
-//        TODO: add the map setup implementation
+        //the Setup of the map
+        val mapFragment = childFragmentManager
+            .findFragmentById(R.id.map) as SupportMapFragment
+        mapFragment.getMapAsync(this)
+
 //        TODO: zoom to the user location after taking his permission
 //        TODO: add style to the map
 //        TODO: put a marker to location that the user selected
@@ -87,8 +92,8 @@ class SelectLocationFragment : BaseFragment(),OnMapReadyCallback {
         else -> super.onOptionsItemSelected(item)
     }
 
-    override fun onMapReady(map: GoogleMap?) {
-        TODO("Not yet implemented")
+    override fun onMapReady(googleMap: GoogleMap) {
+        map = googleMap
     }
 
 
