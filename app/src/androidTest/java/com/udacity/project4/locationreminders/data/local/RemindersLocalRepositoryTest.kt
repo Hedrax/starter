@@ -34,5 +34,9 @@ class RemindersLocalRepositoryTest {
     private lateinit var remindersDao: FakeReminderDAO
     private lateinit var localRepository: RemindersLocalRepository
 
-
+    @Before
+    fun setup() {
+        remindersDao = FakeReminderDAO()
+        localRepository = RemindersLocalRepository(remindersDao, Dispatchers.Unconfined)
+    }
 }
