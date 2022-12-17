@@ -134,6 +134,9 @@ class SelectLocationFragment : BaseFragment(),OnMapReadyCallback {
             LocationRequest.create()
                 .apply {priority = LocationRequest.PRIORITY_LOW_POWER}
         val requestBuilder = LocationSettingsRequest.Builder().addLocationRequest(locationRequest)
+        val settingsClient = LocationServices.getSettingsClient(requireActivity())
+        val settingsResponse =
+            settingsClient.checkLocationSettings(requestBuilder.build())
 
     }
  //permissions
