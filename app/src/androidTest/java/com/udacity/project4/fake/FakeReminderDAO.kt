@@ -10,5 +10,9 @@ class FakeReminderDAO : RemindersDao {
         lst.addAll(serviceData.values)
         return lst
     }
+    override suspend fun getReminderById(reminderId: String): ReminderDTO? {
+        serviceData[reminderId]?.let {return it}
+        return null
+    }
 
 }
