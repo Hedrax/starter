@@ -55,4 +55,18 @@ class RemindersDaoTest {
         Assert.assertThat(remindersLst[0].title, `is`(reminder.title))
         Assert.assertThat(remindersLst[0].description, `is`(reminder.description))
     }
+    @Test
+    fun deleteRemindersTest() = runBlockingTest {
+        //GIVEN Some values to be inserted in db
+        val reminderDTOList = listOf<ReminderDTO>(
+            ReminderDTO("title1", "description","location",(0..360).random().toDouble(),(0..360).random().toDouble()),
+            ReminderDTO("title2", "description","location",(0..360).random().toDouble(),(0..360).random().toDouble()),
+            ReminderDTO("title3", "description","location",(0..360).random().toDouble(),(0..360).random().toDouble()))
+        reminderDTOList.forEach {db.reminderDao().saveReminder(it)}
+        //WHEN deleting all elements
+        db.reminderDao().deleteAllReminders()
+        //THEN db is empty
+        val reminderDTOList1 = db.reminderDao().getReminders()
+        Assert.assertThat(reminderDTOList1.isEmpty(), `is`(true))
+    }
 }
