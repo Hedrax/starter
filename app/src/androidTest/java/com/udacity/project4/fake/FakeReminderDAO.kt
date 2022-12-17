@@ -14,5 +14,11 @@ class FakeReminderDAO : RemindersDao {
         serviceData[reminderId]?.let {return it}
         return null
     }
+    override suspend fun saveReminder(reminder: ReminderDTO) {
+        serviceData[reminder.id] = reminder
+    }
+    override suspend fun deleteAllReminders() {
+        serviceData.clear()
+    }
 
 }
