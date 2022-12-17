@@ -130,6 +130,10 @@ class SelectLocationFragment : BaseFragment(),OnMapReadyCallback {
     //asks user to open the location
     private fun checkDeviceLocationSettings() {
         Log.i(TAG,"Checking device location ")
+        val locationRequest =
+            LocationRequest.create()
+                .apply {priority = LocationRequest.PRIORITY_LOW_POWER}
+        val requestBuilder = LocationSettingsRequest.Builder().addLocationRequest(locationRequest)
 
     }
  //permissions
