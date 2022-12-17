@@ -63,7 +63,6 @@ class SelectLocationFragment : BaseFragment(),OnMapReadyCallback {
                 _viewModel.showToast.value = getString(R.string.missing_location)
             }
         }
-//        TODO: call this function after the user confirms on the selected location
 
         return binding.root
     }
