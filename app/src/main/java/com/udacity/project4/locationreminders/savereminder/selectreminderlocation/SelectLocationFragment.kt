@@ -11,11 +11,16 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
 import androidx.navigation.fragment.findNavController
+import com.google.android.gms.common.api.ResolvableApiException
+import com.google.android.gms.location.LocationRequest
+import com.google.android.gms.location.LocationServices
+import com.google.android.gms.location.LocationSettingsRequest
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.*
+import com.google.android.material.snackbar.Snackbar
 import com.udacity.project4.R
 import com.udacity.project4.base.BaseFragment
 import com.udacity.project4.databinding.FragmentSelectLocationBinding
@@ -120,6 +125,13 @@ class SelectLocationFragment : BaseFragment(),OnMapReadyCallback {
         map = googleMap
     }
 
+
+    //The function checks for the current location accessibility of the device if there is a failure tries to
+    //asks user to open the location
+    private fun checkDeviceLocationSettings() {
+        Log.i(TAG,"Checking device location ")
+
+    }
  //permissions
  private fun isPermissionGranted() : Boolean {
      return ContextCompat.checkSelfPermission(
@@ -136,13 +148,13 @@ class SelectLocationFragment : BaseFragment(),OnMapReadyCallback {
                 REQUEST_LOCATION_PERMISSION
             )
         }catch (e:Exception){
-            Log.i(TAG,"REquestForeground permission ")
+            Log.i(TAG,"RequestForeground permission ")
         }
     }
     //checks the API level and  based on that checks for background permissions for geofence
     @TargetApi(29)
     private fun requestBackgroundLocationPermissions() {
-        Log.i(TAG,"REquest ")
+        Log.i(TAG,"Request ")
         ActivityCompat.requestPermissions(
             this.activity!!,
             arrayOf<String>(Manifest.permission.ACCESS_BACKGROUND_LOCATION),
