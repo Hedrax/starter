@@ -2,6 +2,7 @@ package com.udacity.project4.locationreminders.savereminder.selectreminderlocati
 
 
 import android.Manifest
+import android.annotation.SuppressLint
 import android.annotation.TargetApi
 import android.content.pm.PackageManager
 import android.os.Bundle
@@ -141,7 +142,18 @@ class SelectLocationFragment : BaseFragment(),OnMapReadyCallback {
                _viewModel.showSnackBarInt.value = R.string.location_required_error
         }
     }
- //permissions
+    //checks if we have access on location to navigate to location position
+    @SuppressLint("MissingPermission")
+    private fun enableMyLocation() {
+        if (isPermissionGranted()) {
+            checkDeviceLocationSettings()
+            map.isMyLocationEnabled = true
+        }
+        else {
+            requestForeGroundLocationPermission()
+        }
+    }
+    //permissions
  private fun isPermissionGranted() : Boolean {
      return ContextCompat.checkSelfPermission(
          requireContext(),
