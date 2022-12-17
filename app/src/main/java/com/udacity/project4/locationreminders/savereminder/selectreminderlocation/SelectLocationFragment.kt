@@ -5,6 +5,7 @@ import android.Manifest
 import android.annotation.SuppressLint
 import android.annotation.TargetApi
 import android.content.pm.PackageManager
+import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.*
@@ -196,6 +197,28 @@ class SelectLocationFragment : BaseFragment(),OnMapReadyCallback {
             REQUEST_BACKGROUND_LOCATION
         )
         Log.d(TAG, "BackGround access")
+    }
+    //checks if the background and foreground permission is granted in order to fn geofence when background
+    //and calls specified fns to ask for permission
+    private fun foregroundAndBackgroundLocationPermissionApproved(){
+        val forGroundAccess =
+            PackageManager.PERMISSION_GRANTED ==
+                    ContextCompat.checkSelfPermission(
+                        requireContext(),
+                        Manifest.permission.ACCESS_FINE_LOCATION
+                    )
+        if (!forGroundAccess)
+            requestForeGroundLocationPermission()
+
+        if (Build.VERSION.SDK_INT >= 29) {
+            val backGroundAccess =
+                PackageManager.PERMISSION_GRANTED == ContextCompat.checkSelfPermission(
+                    requireContext(),
+                    Manifest.permission.ACCESS_BACKGROUND_LOCATION
+                )
+            if (!backGroundAccess)
+                requestBackgroundLocationPermissions()
+        }
     }
     companion object{
         const val TAG = "Select_Fragment"
