@@ -13,7 +13,6 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
 import androidx.navigation.fragment.findNavController
-import com.google.android.gms.common.api.ResolvableApiException
 import com.google.android.gms.location.LocationRequest
 import com.google.android.gms.location.LocationServices
 import com.google.android.gms.location.LocationSettingsRequest
@@ -22,7 +21,6 @@ import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.*
-import com.google.android.material.snackbar.Snackbar
 import com.udacity.project4.R
 import com.udacity.project4.base.BaseFragment
 import com.udacity.project4.databinding.FragmentSelectLocationBinding
@@ -65,13 +63,15 @@ class SelectLocationFragment : BaseFragment(),OnMapReadyCallback {
                 _viewModel.showToast.value = getString(R.string.missing_location)
             }
         }
-//        TODO: zoom to the user location after taking his permission
-
 //        TODO: call this function after the user confirms on the selected location
 
         return binding.root
     }
 
+    override fun onStart() {
+        super.onStart()
+        foregroundAndBackgroundLocationPermissionApproved()
+    }
     //the fn handles what to be done when adding marker and update the location selected variable to
     //be added to the save reminder fragment
     private fun setPoiClk(map: GoogleMap) {
