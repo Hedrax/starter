@@ -124,6 +124,9 @@ class SelectLocationFragment : BaseFragment(),OnMapReadyCallback {
 
     override fun onMapReady(googleMap: GoogleMap) {
         map = googleMap
+        setPoiClk(map)
+        mapStyling(map)
+        enableMyLocation()
     }
 
 
@@ -151,6 +154,17 @@ class SelectLocationFragment : BaseFragment(),OnMapReadyCallback {
         }
         else {
             requestForeGroundLocationPermission()
+        }
+    }
+    //Check if location permissions are granted and if so enable the location data layer.
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<out String>,
+        grantResults: IntArray
+    ) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        if (requestCode == REQUEST_LOCATION_PERMISSION) {
+            enableMyLocation()
         }
     }
     //permissions
