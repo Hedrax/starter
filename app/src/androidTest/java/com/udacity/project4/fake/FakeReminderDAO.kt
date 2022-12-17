@@ -4,7 +4,7 @@ import com.udacity.project4.locationreminders.data.dto.ReminderDTO
 import com.udacity.project4.locationreminders.data.local.RemindersDao
 
 class FakeReminderDAO : RemindersDao {
-    private val serviceData: LinkedHashMap<String, ReminderDTO> = LinkedHashMap()
+    val serviceData: LinkedHashMap<String, ReminderDTO> = LinkedHashMap()
     override suspend fun getReminders(): List<ReminderDTO> {
         val lst = mutableListOf<ReminderDTO>()
         lst.addAll(serviceData.values)
