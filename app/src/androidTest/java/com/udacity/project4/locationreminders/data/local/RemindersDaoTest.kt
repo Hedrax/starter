@@ -6,16 +6,13 @@ import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 import androidx.test.filters.SmallTest;
 import com.udacity.project4.locationreminders.data.dto.ReminderDTO
-
 import org.junit.runner.RunWith;
-
 import kotlinx.coroutines.ExperimentalCoroutinesApi;
 import kotlinx.coroutines.test.runBlockingTest
 import org.hamcrest.CoreMatchers.`is`
 import org.hamcrest.CoreMatchers.notNullValue
-import org.hamcrest.MatcherAssert.assertThat
 import org.junit.*
-import kotlin.random.Random
+import java.util.*
 
 @ExperimentalCoroutinesApi
 @RunWith(AndroidJUnit4::class)
@@ -69,4 +66,34 @@ class RemindersDaoTest {
         val reminderDTOList1 = db.reminderDao().getReminders()
         Assert.assertThat(reminderDTOList1.isEmpty(), `is`(true))
     }
+    @Test
+    fun reminderByIdNotFound() =
+        runBlockingTest {
+            //GIVEN random ID
+            val id = UUID.randomUUID().toString()
+            //WHEN extracting the item from the data base with that id
+            val reminderDTO = db.reminderDao().getReminderById(id)
+            //THEN the expected value should be null and a value in P of (1/billion*billion)
+            Assert.assertNull(reminderDTO)
+        }
+    @Test
+    fun insertReminderByID() =
+        runBlockingTest {
+            //GIVEN ReminderDTO into the database
+            val reminderDTO = ReminderDTO(
+                "title",
+                "description",
+                "location",(0..360).random().toDouble(),(0..360).random().toDouble())
+            db.reminderDao().saveReminder(reminderDTO)
+            //WHEN using id to extract reminders
+            val reminderDTO1 = db.reminderDao().getReminderById(reminderDTO.id)
+            //THEN we got one reminder data and it suppose to equal same as the original inserted value
+            Assert.assertThat<ReminderDTO>(reminderDTO1 as ReminderDTO, notNullValue())
+            Assert.assertThat(reminderDTO1.id, `is`(reminderDTO.id))
+            Assert.assertThat(reminderDTO1.title, `is`(reminderDTO.title))
+            Assert.assertThat(reminderDTO1.description, `is`(reminderDTO.description))
+            Assert.assertThat(reminderDTO1.location, `is`(reminderDTO.location))
+            Assert.assertThat(reminderDTO1.latitude, `is`(reminderDTO.latitude))
+            Assert.assertThat(reminderDTO1.longitude, `is`(reminderDTO.longitude))
+        }
 }
