@@ -137,7 +137,9 @@ class SelectLocationFragment : BaseFragment(),OnMapReadyCallback {
         val settingsClient = LocationServices.getSettingsClient(requireActivity())
         val settingsResponse =
             settingsClient.checkLocationSettings(requestBuilder.build())
-
+        settingsResponse.addOnFailureListener {
+               _viewModel.showSnackBarInt.value = R.string.location_required_error
+        }
     }
  //permissions
  private fun isPermissionGranted() : Boolean {
