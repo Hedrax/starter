@@ -12,9 +12,11 @@ import com.udacity.project4.locationreminders.data.dto.Result
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.test.runBlockingTest
 import org.hamcrest.CoreMatchers.`is`
 import org.hamcrest.CoreMatchers.instanceOf
 import org.hamcrest.MatcherAssert.assertThat
+import org.hamcrest.core.IsEqual
 import org.junit.After
 import org.junit.Before
 import org.junit.Rule
@@ -47,5 +49,12 @@ class RemindersLocalRepositoryTest {
         remindersRepository = RemindersLocalRepository(
             reminderDao,
             Dispatchers.Unconfined)
+    }
+    @Test
+    fun getReminder_requestsAllRemindersFromLocalDataSource() = runBlockingTest {
+        // When we get the reminders from the Repo
+        val reminders = remindersRepository.getReminders() as Result.Success
+        // Then tasks are loaded from the ReminderDAO
+        assertThat(reminders.data, IsEqual(reminderDao.getReminders()))
     }
 }
