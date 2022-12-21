@@ -67,4 +67,11 @@ class RemindersLocalRepositoryTest {
         assertThat(reminders.data, IsEqual(newReminders))
     }
 
+    @Test
+    fun getReminderByID() = runBlockingTest {
+        //When passing the Id of the first element
+        val reminder = remindersRepository.getReminder(localReminders[0].id) as Result.Success
+        //Then it should equals the element that we passed in ID
+        assertThat(reminder.data, IsEqual(localReminders[0]))
+    }
 }
