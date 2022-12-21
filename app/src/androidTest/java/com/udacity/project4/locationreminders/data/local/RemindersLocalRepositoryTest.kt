@@ -1,5 +1,6 @@
 package com.udacity.project4.locationreminders.data.local
 
+import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.filters.MediumTest
 import com.udacity.project4.fake.FakeDataSource
@@ -12,6 +13,7 @@ import kotlinx.coroutines.test.runBlockingTest
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.core.IsEqual
 import org.junit.Before
+import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 
@@ -20,6 +22,9 @@ import org.junit.runner.RunWith
 //Medium Test to test the repository
 @MediumTest
 class RemindersLocalRepositoryTest {
+
+    @get:Rule
+    var instantExecutorRule = InstantTaskExecutorRule()
 
     private val reminder1 = ReminderDTO("Title1", "Description1","Location 1", (0..360).random().toDouble(),(0..360).random().toDouble())
     private val reminder2 = ReminderDTO("Title2", "Description2","Location 2", (0..360).random().toDouble(),(0..360).random().toDouble())

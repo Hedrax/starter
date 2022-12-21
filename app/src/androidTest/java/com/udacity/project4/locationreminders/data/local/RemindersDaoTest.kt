@@ -20,4 +20,7 @@ import java.util.*
 @SmallTest
 class RemindersDaoTest {
 
+    @get:Rule
+    var instantExecutor = InstantTaskExecutorRule()
+
 }
