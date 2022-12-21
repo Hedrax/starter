@@ -37,7 +37,7 @@ class RemindersLocalRepositoryTest {
     private val Reminder3 = ReminderDTO("Title3", "Description3","Location 3", (0..360).random().toDouble(),(0..360).random().toDouble())
     private val ReminderNew = ReminderDTO("TitleNew", "DescriptionNew","Location New", (0..360).random().toDouble(),(0..360).random().toDouble())
     private val localReminders = listOf(Reminder1,Reminder2,Reminder3).sortedBy { it.id }
-    private val newReminders = listOf(ReminderNew).sortedBy { it.id }
+    private val newReminders = listOf(Reminder1,Reminder2,Reminder3,ReminderNew).sortedBy { it.id }
 
     private lateinit var remindersLocalDataSource: FakeDataSource
     private lateinit var remindersRepository: RemindersLocalRepository
@@ -57,4 +57,14 @@ class RemindersLocalRepositoryTest {
         // Then tasks are loaded from the ReminderDAO
         assertThat(reminders.data, IsEqual(reminderDao.getReminders()))
     }
+
+    @Test
+    fun saveReminders_savingNewReminder() = runBlockingTest {
+        //When save new reminder to Repo
+        remindersRepository.saveReminder(ReminderNew)
+        val reminders = remindersRepository.getReminders() as Result.Success
+        //Then it should equals the original + the new added reminder
+        assertThat(reminders.data, IsEqual(newReminders))
+    }
+
 }
