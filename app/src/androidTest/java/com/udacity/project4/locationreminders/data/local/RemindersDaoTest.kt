@@ -68,5 +68,19 @@ class RemindersDaoTest {
         //Then retrieved item should be item 3
         assertThat(reminder, IsEqual(reminder3))
     }
+    @Test
+    fun deleteReminders_deletingAllRemindersInDB() = runBlockingTest{
+        database.reminderDao().saveReminder(reminder1)
+        database.reminderDao().saveReminder(reminder2)
+        database.reminderDao().saveReminder(reminder3)
+        //Given the database is not empty
+        assertThat((database.reminderDao().getReminders().isEmpty()),IsEqual(false))
+        //When deleting all reminders in the db
+        database.reminderDao().deleteAllReminders()
+        val reminders = database.reminderDao().getReminders()
+        //Then reminders size equals 3
+        assertThat(reminders.isEmpty(), IsEqual(true))
+    }
+
 
 }
