@@ -7,11 +7,14 @@ import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 import androidx.test.filters.SmallTest;
 import com.udacity.project4.locationreminders.data.dto.ReminderDTO
+import com.udacity.project4.locationreminders.data.dto.Result
 import org.junit.runner.RunWith;
 import kotlinx.coroutines.ExperimentalCoroutinesApi;
 import kotlinx.coroutines.test.runBlockingTest
 import org.hamcrest.CoreMatchers.`is`
 import org.hamcrest.CoreMatchers.notNullValue
+import org.hamcrest.MatcherAssert.assertThat
+import org.hamcrest.core.IsEqual
 import org.junit.*
 import java.util.*
 
@@ -30,13 +33,27 @@ class RemindersDaoTest {
     private val reminderNew = ReminderDTO("TitleNew", "DescriptionNew","Location New", (0..360).random().toDouble(),(0..360).random().toDouble())
     private val localReminders = listOf(reminder1,reminder2,reminder3).sortedBy { it.id }
     private val newReminders = listOf(reminder1,reminder2,reminder3,reminderNew).sortedBy { it.id }
-
+    private lateinit var database: RemindersDatabase
     @Before
     fun initDB() {
-        val dataBase = Room.inMemoryDatabaseBuilder(
+        database = Room.inMemoryDatabaseBuilder(
             ApplicationProvider.getApplicationContext(),
             RemindersDatabase::class.java
         ).build()
+    }
+
+    @Test
+    fun getReminders_requestingRemindersAfterInserting() = runBlockingTest{
+        //Given the database is empty
+        assertThat((database.reminderDao().getReminders().isEmpty()),IsEqual(true))
+        //When adding reminders to the db
+        database.reminderDao().saveReminder(reminder1)
+        database.reminderDao().saveReminder(reminder2)
+        database.reminderDao().saveReminder(reminder3)
+        val reminders = database.reminderDao().getReminders()
+
+        //Then reminders size equals 3
+        assertThat(reminders.size, IsEqual(3))
     }
 
 }
