@@ -2,6 +2,7 @@ package com.udacity.project4.locationreminders.data.local
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.room.Room
+import androidx.room.RoomDatabase
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 import androidx.test.filters.SmallTest;
@@ -30,6 +31,12 @@ class RemindersDaoTest {
     private val localReminders = listOf(reminder1,reminder2,reminder3).sortedBy { it.id }
     private val newReminders = listOf(reminder1,reminder2,reminder3,reminderNew).sortedBy { it.id }
 
-
+    @Before
+    fun initDB() {
+        val dataBase = Room.inMemoryDatabaseBuilder(
+            ApplicationProvider.getApplicationContext(),
+            RemindersDatabase::class.java
+        ).build()
+    }
 
 }
