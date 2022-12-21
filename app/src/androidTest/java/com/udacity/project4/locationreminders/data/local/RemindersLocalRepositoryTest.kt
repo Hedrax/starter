@@ -74,4 +74,15 @@ class RemindersLocalRepositoryTest {
         //Then it should equals the element that we passed in ID
         assertThat(reminder.data, IsEqual(localReminders[0]))
     }
+    @Test
+    fun deleteReminders_deletingAllReminders() = runBlockingTest {
+        //When getting all reminders
+        val reminders = remindersRepository.getReminders() as Result.Success
+        //Given that the list isn't empty
+        assertThat(reminders.data.isEmpty(), IsEqual(false))
+        remindersRepository.deleteAllReminders()
+        val remindersUpdated = remindersRepository.getReminders() as Result.Success
+        //Then the size equals 0
+        assertThat(remindersUpdated.data.size, IsEqual(0))
+    }
 }
