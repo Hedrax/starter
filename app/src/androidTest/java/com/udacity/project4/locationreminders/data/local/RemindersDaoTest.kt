@@ -55,5 +55,18 @@ class RemindersDaoTest {
         //Then reminders size equals 3
         assertThat(reminders.size, IsEqual(3))
     }
+    @Test
+    fun getRemindersByID_requestingRemindersWithGivenId() = runBlockingTest{
+        //Given the database is empty
+        assertThat((database.reminderDao().getReminders().isEmpty()),IsEqual(true))
+        //When adding reminders to the db and retrieving item3 by id
+        database.reminderDao().saveReminder(reminder1)
+        database.reminderDao().saveReminder(reminder2)
+        database.reminderDao().saveReminder(reminder3)
+        val reminder = database.reminderDao().getReminderById(reminder3.id)
+
+        //Then retrieved item should be item 3
+        assertThat(reminder, IsEqual(reminder3))
+    }
 
 }
