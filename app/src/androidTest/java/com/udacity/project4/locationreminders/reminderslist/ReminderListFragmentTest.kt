@@ -3,8 +3,11 @@ package com.udacity.project4.locationreminders.reminderslist
 import android.content.Context
 import android.os.Bundle
 import androidx.fragment.app.testing.launchFragmentInContainer
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.ViewModelProvider.AndroidViewModelFactory
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
+import androidx.test.core.app.ApplicationProvider
 import androidx.test.core.app.ApplicationProvider.getApplicationContext
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions.click
@@ -16,9 +19,14 @@ import com.udacity.project4.fake.FakeDataSource
 import com.udacity.project4.locationreminders.data.dto.ReminderDTO
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import org.junit.Assert.*
+import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
+import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.Koin
+import org.koin.core.context.startKoin
+import org.koin.core.context.stopKoin
+import org.koin.dsl.module
 import org.koin.test.AutoCloseKoinTest
 import org.koin.test.KoinTest
 import org.mockito.Mockito.mock
@@ -35,10 +43,17 @@ class ReminderListFragmentTest :AutoCloseKoinTest(){
 //    TODO: add testing for the error messages.
 
     private lateinit var dataSource: FakeDataSource
-    private lateinit var ViewModel: RemindersListViewModel
+    private lateinit var viewModel: RemindersListViewModel
     private val reminder1 = ReminderDTO("Title1", "Description1","Location 1", (0..360).random().toDouble(),(0..360).random().toDouble())
     private val reminder2 = ReminderDTO("Title2", "Description2","Location 2", (0..360).random().toDouble(),(0..360).random().toDouble())
     private val reminder3 = ReminderDTO("Title3", "Description3","Location 3", (0..360).random().toDouble(),(0..360).random().toDouble())
 
 
+    @Before
+    fun varInit(){
+        dataSource = FakeDataSource(mutableListOf(reminder1,reminder2,reminder3))
+        viewModel = RemindersListViewModel(getApplicationContext(),dataSource)
+        stopKoin()
+        startKoin { module{single {viewModel}} }
+    }
 }
