@@ -75,11 +75,22 @@ class ReminderListFragmentTest :AutoCloseKoinTest(){
     }
 
     @Test
-    fun errorMessage_RemovingAllReminders() =
-        runBlockingTest {
+    fun errorMessage_RemovingAllReminders() = runBlockingTest {
             //WHEN deleting all reminders
             dataSource.deleteAllReminders()
             //Then a message will show up
             onView(withText("No reminders found")).check(matches(isDisplayed()))
         }
+
+    @Test
+    fun navigationAway_navigatingToAddReminder() = runBlockingTest {
+        //GIVEN launching the Reminder List Fragment
+        val fragmentScenario = launchFragmentInContainer<ReminderListFragment>(Bundle(), R.style.AppTheme)
+        val navController = mock(NavController::class.java)
+        fragmentScenario.onFragment {Navigation.setViewNavController(it.view!!, navController)}
+        //WHEN clicking on the add Reminder floating button
+        onView(withId(R.id.addReminderFAB)).perform(click())
+        //THEN it will navigate away to saveReminder
+        verify(navController).navigate(ReminderListFragmentDirections.toSaveReminder())
+    }
 }
