@@ -57,8 +57,7 @@ class SaveReminderViewModel(val app: Application, val dataSource: ReminderDataSo
     //simple setter fn for easy translation from ReminderDTO to position
     fun setPositionReminder(value: ReminderDataItem) {
         title.value = value.title
-        selectedPosition.value?.title = value.location
-        selectedPosition.value?.position = LatLng(value.latitude!!,value.longitude!!)
+
     }
     //check if the title is not null and a position has been selected
     private fun checkValidity(): Boolean {
@@ -73,7 +72,7 @@ class SaveReminderViewModel(val app: Application, val dataSource: ReminderDataSo
         return true
     }
     //saving to dataBase process
-    private fun appendData() {
+    fun appendData() {
         showLoading.value = true
         viewModelScope.launch {
             dataSource.saveReminder(ReminderDTO(
