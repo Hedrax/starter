@@ -11,7 +11,9 @@ import androidx.test.core.app.ApplicationProvider
 import androidx.test.core.app.ApplicationProvider.getApplicationContext
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions.click
+import androidx.test.espresso.assertion.ViewAssertions
 import androidx.test.espresso.assertion.ViewAssertions.matches
+import androidx.test.espresso.matcher.ViewMatchers
 import androidx.test.espresso.matcher.ViewMatchers.*
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.filters.MediumTest
@@ -71,4 +73,13 @@ class ReminderListFragmentTest :AutoCloseKoinTest(){
         onView(withId(R.id.reminderCardView)).check(matches(isDisplayed()))
         onView(withId(R.id.title)).check(matches(withText( reminder1.title)))
     }
+
+    @Test
+    fun errorMessage_RemovingAllReminders() =
+        runBlockingTest {
+            //WHEN deleting all reminders
+            dataSource.deleteAllReminders()
+            //Then a message will show up
+            onView(withText("No reminders found")).check(matches(isDisplayed()))
+        }
 }
