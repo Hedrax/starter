@@ -10,4 +10,6 @@ class RemindersListViewModelTest {
 
     //TODO: provide testing to the RemindersListViewModel and its live data objects
 
+    val position = ReminderDataItem("Title","Description","Location",(0..100).random().toDouble(),(0..100).random().toDouble())
+
 }
