@@ -7,7 +7,6 @@ import com.udacity.project4.locationreminders.data.FakeDataSource
 import com.udacity.project4.locationreminders.data.dto.ReminderDTO
 import com.udacity.project4.locationreminders.getOrAwaitValue
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.TimeoutCancellationException
 import kotlinx.coroutines.test.runBlockingTest
 import org.hamcrest.CoreMatchers.`is`
 import org.hamcrest.MatcherAssert.assertThat
@@ -19,8 +18,6 @@ import org.junit.runner.RunWith
 @RunWith(AndroidJUnit4::class)
 @ExperimentalCoroutinesApi
 class RemindersListViewModelTest {
-
-    //TODO: provide testing to the RemindersListViewModel and its live data objects
 
     @get:Rule
     var instantExecutor = InstantTaskExecutorRule()
@@ -41,5 +38,15 @@ class RemindersListViewModelTest {
         val reminders = remindersListViewModel.remindersList.getOrAwaitValue()
         //Then the newReminder is triggered
         assertThat(reminders.isEmpty(),`is`(false))
+    }
+    @Test
+    fun errorMessage_WhenNullDataSource() = runBlockingTest {
+        //Given a newly generated viewModel and an empty dataSource
+        dataSource = FakeDataSource(null)
+        val remindersListViewModel = RemindersListViewModel(ApplicationProvider.getApplicationContext(),dataSource)
+        //when updating reminders
+        remindersListViewModel.loadReminders()
+        //Then returns error message in SnackBar
+        assertThat(remindersListViewModel.showSnackBar.getOrAwaitValue(),`is`("No reminders found"))
     }
 }
