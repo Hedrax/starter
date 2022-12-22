@@ -11,13 +11,16 @@ import androidx.test.core.app.ApplicationProvider
 import androidx.test.core.app.ApplicationProvider.getApplicationContext
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions.click
-import androidx.test.espresso.matcher.ViewMatchers.withId
+import androidx.test.espresso.assertion.ViewAssertions.matches
+import androidx.test.espresso.matcher.ViewMatchers.*
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.filters.MediumTest
 import com.udacity.project4.R
 import com.udacity.project4.fake.FakeDataSource
 import com.udacity.project4.locationreminders.data.dto.ReminderDTO
+import com.udacity.project4.locationreminders.data.dto.Result
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.test.runBlockingTest
 import org.junit.Assert.*
 import org.junit.Before
 import org.junit.Test
@@ -51,9 +54,21 @@ class ReminderListFragmentTest :AutoCloseKoinTest(){
 
     @Before
     fun varInit(){
-        dataSource = FakeDataSource(mutableListOf(reminder1,reminder2,reminder3))
+        dataSource = FakeDataSource()
         viewModel = RemindersListViewModel(getApplicationContext(),dataSource)
         stopKoin()
         startKoin { module{single {viewModel}} }
+    }
+
+    @Test
+    fun listDisplay() = runBlockingTest {
+        //Given the reminder at the beginning of the datasource
+        dataSource.saveReminder(reminder1)
+
+        //When launching the fragment
+        launchFragmentInContainer<ReminderListFragment>(Bundle(), R.style.AppTheme)
+        //Then it will be displayed first
+        onView(withId(R.id.reminderCardView)).check(matches(isDisplayed()))
+        onView(withId(R.id.title)).check(matches(withText( reminder1.title)))
     }
 }
