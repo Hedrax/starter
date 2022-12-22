@@ -66,6 +66,4 @@ class RemindersActivityTest :
     }
 
 
-//    TODO: add End to End testing to the app
-
 }
