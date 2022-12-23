@@ -22,7 +22,7 @@ class FakeReminderDAO : RemindersDao {
     }
 
     override suspend fun deleteAllReminders() {
-        TODO("Not yet implemented")
+        serviceData.clear()
     }
 
 }
