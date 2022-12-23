@@ -7,7 +7,9 @@ class FakeReminderDAO : RemindersDao {
     val serviceData: LinkedHashMap<String, ReminderDTO> = LinkedHashMap()
 
     override suspend fun getReminders(): List<ReminderDTO> {
-        TODO("Not yet implemented")
+        val lst = mutableListOf<ReminderDTO>()
+        lst.addAll(serviceData.values)
+        return lst
     }
 
     override suspend fun getReminderById(reminderId: String): ReminderDTO? {
