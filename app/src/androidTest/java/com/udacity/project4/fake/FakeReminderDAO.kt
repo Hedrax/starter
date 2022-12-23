@@ -13,7 +13,8 @@ class FakeReminderDAO : RemindersDao {
     }
 
     override suspend fun getReminderById(reminderId: String): ReminderDTO? {
-        TODO("Not yet implemented")
+        serviceData[reminderId]?.let {return it}
+        return null
     }
 
     override suspend fun saveReminder(reminder: ReminderDTO) {
