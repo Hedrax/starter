@@ -22,7 +22,7 @@ class FakeDataSource(private var reminderDTOS: MutableList<ReminderDTO>? = mutab
     }
 
     override suspend fun deleteAllReminders() {
-        TODO("Not yet implemented")
+        reminderDTOS = mutableListOf()
     }
 
 }
