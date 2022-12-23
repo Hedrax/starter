@@ -12,7 +12,7 @@ class FakeDataSource(private var reminderDTOS: MutableList<ReminderDTO>? = mutab
     }
 
     override suspend fun saveReminder(reminder: ReminderDTO) {
-        TODO("Not yet implemented")
+        reminderDTOS?.add(reminder)
     }
 
     override suspend fun getReminder(id: String): Result<ReminderDTO> {
