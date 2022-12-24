@@ -67,7 +67,14 @@ class SelectLocationFragment : BaseFragment(),OnMapReadyCallback {
 
         return binding.root
     }
-
+    override fun onMapReady(googleMap: GoogleMap) {
+        map = googleMap
+        map.moveCamera(CameraUpdateFactory.newLatLngZoom(latLngHome,7F))
+        setPoiClk(map)
+        setOnClick(map)
+        mapStyling(map)
+        enableMyLocation()
+    }
     override fun onStart() {
         super.onStart()
         foregroundAndBackgroundLocationPermissionApproved()
@@ -80,7 +87,6 @@ class SelectLocationFragment : BaseFragment(),OnMapReadyCallback {
                 val poiMarker =
                     map.addMarker(MarkerOptions().position(poi.latLng).title(poi.name))
                 poiMarker.showInfoWindow()
-                map.moveCamera(CameraUpdateFactory.newLatLngZoom(poi.latLng, 15F))
                 reminderLocation?.remove()
                 reminderLocation = poiMarker
             }
@@ -123,12 +129,16 @@ class SelectLocationFragment : BaseFragment(),OnMapReadyCallback {
         else -> super.onOptionsItemSelected(item)
     }
 
-    override fun onMapReady(googleMap: GoogleMap) {
-        map = googleMap
-        map.moveCamera(CameraUpdateFactory.newLatLngZoom(latLngHome,7F))
-        setPoiClk(map)
-        mapStyling(map)
-        enableMyLocation()
+
+
+    private fun setOnClick(map: GoogleMap){
+        map.setOnMapClickListener {
+            val marker =
+                map.addMarker(MarkerOptions().position(it).title("Custom Location"))
+            marker.hideInfoWindow()
+            reminderLocation?.remove()
+            reminderLocation = marker
+        }
     }
 
 
