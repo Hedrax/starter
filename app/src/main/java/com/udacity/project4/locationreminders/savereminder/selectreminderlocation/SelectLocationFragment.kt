@@ -94,7 +94,15 @@ class SelectLocationFragment : BaseFragment(),OnMapReadyCallback {
             Log.i(TAG, "set POI click")
         }
     }
-
+    private fun setOnClick(map: GoogleMap){
+        map.setOnMapClickListener {
+            val marker =
+                map.addMarker(MarkerOptions().position(it).title("Custom Location"))
+            marker.hideInfoWindow()
+            reminderLocation?.remove()
+            reminderLocation = marker
+        }
+    }
     //responsible for styling the current map with styling in the JSON file Map_styling.json
     private fun mapStyling(map: GoogleMap) {
         try {
@@ -129,17 +137,6 @@ class SelectLocationFragment : BaseFragment(),OnMapReadyCallback {
         else -> super.onOptionsItemSelected(item)
     }
 
-
-
-    private fun setOnClick(map: GoogleMap){
-        map.setOnMapClickListener {
-            val marker =
-                map.addMarker(MarkerOptions().position(it).title("Custom Location"))
-            marker.hideInfoWindow()
-            reminderLocation?.remove()
-            reminderLocation = marker
-        }
-    }
 
 
     //The function checks for the current location accessibility of the device if there is a failure tries to
