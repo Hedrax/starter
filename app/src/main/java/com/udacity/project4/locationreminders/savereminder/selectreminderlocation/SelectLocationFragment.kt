@@ -30,6 +30,7 @@ import org.koin.android.ext.android.inject
 
 class SelectLocationFragment : BaseFragment(),OnMapReadyCallback {
 
+    private val latLngHome = LatLng(30.06485678718907, 31.218080233756442)
     //Use Koin to get the view model of the SaveReminder
     override val _viewModel: SaveReminderViewModel by inject()
     private lateinit var binding: FragmentSelectLocationBinding
@@ -124,6 +125,7 @@ class SelectLocationFragment : BaseFragment(),OnMapReadyCallback {
 
     override fun onMapReady(googleMap: GoogleMap) {
         map = googleMap
+        map.moveCamera(CameraUpdateFactory.newLatLngZoom(latLngHome,7F))
         setPoiClk(map)
         mapStyling(map)
         enableMyLocation()
