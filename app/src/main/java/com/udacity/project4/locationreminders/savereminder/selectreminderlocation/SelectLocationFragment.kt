@@ -3,15 +3,11 @@ package com.udacity.project4.locationreminders.savereminder.selectreminderlocati
 
 import android.Manifest
 import android.annotation.SuppressLint
-import android.annotation.TargetApi
-import android.app.Application
 import android.content.pm.PackageManager
-import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.*
 import androidx.core.app.ActivityCompat
-import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
 import androidx.navigation.fragment.findNavController
 import com.google.android.gms.location.LocationRequest
@@ -27,9 +23,7 @@ import com.udacity.project4.base.BaseFragment
 import com.udacity.project4.databinding.FragmentSelectLocationBinding
 import com.udacity.project4.locationreminders.savereminder.SaveReminderViewModel
 import com.udacity.project4.utils.setDisplayHomeAsUpEnabled
-import kotlinx.android.synthetic.main.fragment_save_reminder.*
 import org.koin.android.ext.android.inject
-import java.security.Permission
 
 class SelectLocationFragment : BaseFragment(),OnMapReadyCallback {
 
@@ -221,55 +215,9 @@ class SelectLocationFragment : BaseFragment(),OnMapReadyCallback {
          requireContext(),
          permission) == PackageManager.PERMISSION_GRANTED)
  }
-//requests location ForeGround Permission
-    private fun requestForeGroundLocationPermission(){
-        try {
-            ActivityCompat.requestPermissions(
-                requireActivity(),
-                arrayOf<String>(Manifest.permission.ACCESS_FINE_LOCATION),
-                REQUEST_LOCATION_PERMISSION
-            )
-        }catch (e:Exception){
-            Log.i(TAG,"RequestForeground permission ")
-        }
-    }
-    //checks the API level and  based on that checks for background permissions for geofence
-    @TargetApi(29)
-    private fun requestBackgroundLocationPermissions() {
-        Log.i(TAG,"Request ")
-        ActivityCompat.requestPermissions(
-            this.activity!!,
-            arrayOf<String>(Manifest.permission.ACCESS_BACKGROUND_LOCATION),
-            REQUEST_BACKGROUND_LOCATION
-        )
-        Log.d(TAG, "BackGround access")
-    }
-    //checks if the background and foreground permission is granted in order to fn geofence when background
-    //and calls specified fns to ask for permission
-    private fun foregroundAndBackgroundLocationPermissionApproved(){
-        val forGroundAccess =
-            PackageManager.PERMISSION_GRANTED ==
-                    ContextCompat.checkSelfPermission(
-                        requireContext(),
-                        Manifest.permission.ACCESS_FINE_LOCATION
-                    )
-        if (!forGroundAccess)
-            requestForeGroundLocationPermission()
-
-        if (Build.VERSION.SDK_INT >= 29) {
-            val backGroundAccess =
-                PackageManager.PERMISSION_GRANTED == ContextCompat.checkSelfPermission(
-                    requireContext(),
-                    Manifest.permission.ACCESS_BACKGROUND_LOCATION
-                )
-            if (!backGroundAccess)
-                requestBackgroundLocationPermissions()
-        }
-    }
     companion object{
         const val TAG = "Select_Fragment"
         const val REQUEST_LOCATION_PERMISSION = 112
-        const val REQUEST_BACKGROUND_LOCATION = 113
     }
 
 }
