@@ -75,6 +75,7 @@ class SelectLocationFragment : BaseFragment(),OnMapReadyCallback {
         setPoiClk(map)
         setOnClick(map)
         mapStyling(map)
+        updateLocationUI()
         }catch (e:Exception){
             Log.i(TAG,"${e.message}")
         }
