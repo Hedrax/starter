@@ -58,7 +58,7 @@ class SaveReminderFragment : BaseFragment() {
                 //that when the flag is enabled
                 _viewModel.getLocation()?.let { it1 ->
                     addGeofence(it1)
-                    //Todo add append data after check and clear saveFlag if handled a failure
+                    _viewModel.saveFlag.value = false
                 }
             }
         })
