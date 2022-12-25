@@ -43,7 +43,7 @@ class AuthenticationActivity : AppCompatActivity() {
         val providers = arrayListOf(
             AuthUI.IdpConfig
                 .EmailBuilder()
-                .build()
+                .build(),AuthUI.IdpConfig.GoogleBuilder().build()
         )
         startActivityForResult(
             AuthUI.getInstance()
