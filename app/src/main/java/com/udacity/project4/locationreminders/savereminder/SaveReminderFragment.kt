@@ -2,9 +2,7 @@ package com.udacity.project4.locationreminders.savereminder
 
 import android.Manifest
 import android.annotation.SuppressLint
-import android.annotation.TargetApi
 import android.app.PendingIntent
-import android.bluetooth.BluetoothClass.Device
 import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
@@ -12,24 +10,17 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
-import androidx.annotation.RequiresApi
 import androidx.core.app.ActivityCompat
-import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
-import androidx.navigation.fragment.findNavController
 import com.google.android.gms.location.*
 import com.google.android.gms.maps.model.LatLng
 import com.udacity.project4.R
 import com.udacity.project4.base.BaseFragment
 import com.udacity.project4.databinding.FragmentSaveReminderBinding
 import com.udacity.project4.locationreminders.geofence.GeofenceUtils
-import com.udacity.project4.locationreminders.reminderslist.RemindersListViewModel
 import com.udacity.project4.locationreminders.savereminder.selectreminderlocation.SelectLocationFragment
 import com.udacity.project4.utils.setDisplayHomeAsUpEnabled
 import org.koin.android.ext.android.inject
-import org.koin.androidx.viewmodel.ext.android.getSharedViewModel
-import org.koin.androidx.viewmodel.ext.android.getViewModel
 import java.util.*
 
 class SaveReminderFragment : BaseFragment() {
@@ -55,7 +46,6 @@ class SaveReminderFragment : BaseFragment() {
                 //checking device settings at first
                 _viewModel.getLocation()?.let {
                     if (permissionHandling()){
-                        Log.i(TAG,"Permission handling true")
                         addGeofence(it)
                     }
                     _viewModel.saveFlag.value = false
@@ -90,7 +80,6 @@ class SaveReminderFragment : BaseFragment() {
                 .addGeofences(geofenceRequest, pendingIntent)
                 .addOnCompleteListener{
                     if(it.isSuccessful){
-                        Log.i(TAG, "Added geoFence Successfully")
                         _viewModel.showToast.value = "Geofence Added"
                         _viewModel.showSnackBar.value = "Geofences Added"
                         _viewModel.appendData()
@@ -166,7 +155,6 @@ class SaveReminderFragment : BaseFragment() {
             permission = Manifest.permission.ACCESS_FINE_LOCATION
             requestCode = REQUEST_LOCATION_PERMISSION
             if (!isPermissionGranted(permission)) {
-                Log.i(TAG, "Already Foreground permission granted")
                 this.requestPermissions(arrayOf(permission), requestCode)
                 return false
             }
@@ -178,7 +166,6 @@ class SaveReminderFragment : BaseFragment() {
                 permission = Manifest.permission.ACCESS_BACKGROUND_LOCATION
                 requestCode = REQUEST_BACKGROUND_LOCATION
                 if (!isPermissionGranted(permission)) {
-                    Log.i(TAG, "Already BackGround permission granted")
                     this.requestPermissions(arrayOf(permission), requestCode)
                     return false
                 }
@@ -191,7 +178,6 @@ class SaveReminderFragment : BaseFragment() {
             if (!_viewModel.locationEnabled)
             {
                 checkDeviceLocationSettings()
-                Log.i(TAG, "Location Device is Not enabled")
                 return false
             }
         }catch (e:Exception){
