@@ -1,12 +1,18 @@
 package com.udacity.project4.locationreminders.savereminder
 
+import android.Manifest
 import android.annotation.SuppressLint
+import android.annotation.TargetApi
 import android.app.PendingIntent
+import android.content.pm.PackageManager
+import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.annotation.RequiresApi
+import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
 import androidx.navigation.fragment.findNavController
 import com.google.android.gms.location.Geofence
@@ -45,8 +51,12 @@ class SaveReminderFragment : BaseFragment() {
         geoBuilder = GeofenceUtils(context)
         //observer on saveFlag liveData when we're saving the data he will cause adding geofence
         _viewModel.saveFlag.observe(viewLifecycleOwner, androidx.lifecycle.Observer {
-            if(it) _viewModel.getLocation()?.let { it1 -> addGeofence(it1)}
-
+            if(it) {
+                backGroundPermissionApproved()
+                _viewModel.getLocation()?.let { it1 ->
+                    addGeofence(it1)
+                }
+            }
         })
         return binding.root
     }
@@ -83,7 +93,31 @@ class SaveReminderFragment : BaseFragment() {
             Log.i(TAG, "geofence")
         }
     }
+    //checks the API level and  based on that checks for background permissions for geofence
+    @TargetApi(29)
+    private fun requestBackgroundLocationPermissions() {
+        this.requestPermissions(
+            arrayOf<String>(Manifest.permission.ACCESS_BACKGROUND_LOCATION),
+            REQUEST_BACKGROUND_LOCATION
+        )
+        Log.d(TAG, "BackGround access")
+    }
+    //checks if the background permission is granted in order to request it
+    @RequiresApi(Build.VERSION_CODES.Q)
+    private fun backGroundPermissionApproved(){
+
+            Log.i(TAG,"Request ")
+            val backGroundAccess =
+                PackageManager.PERMISSION_GRANTED == ContextCompat.checkSelfPermission(
+                    requireContext(),
+                    Manifest.permission.ACCESS_BACKGROUND_LOCATION
+                )
+            if (!backGroundAccess)
+                requestBackgroundLocationPermissions()
+
+    }
     companion object {
         const val TAG = "SaveReminderFrag"
+        const val REQUEST_BACKGROUND_LOCATION = 113
     }
 }
