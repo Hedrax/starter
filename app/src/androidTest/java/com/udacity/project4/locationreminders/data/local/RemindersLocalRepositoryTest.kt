@@ -18,6 +18,7 @@ import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
+import java.util.UUID
 
 @ExperimentalCoroutinesApi
 @RunWith(AndroidJUnit4::class)
@@ -84,5 +85,16 @@ class RemindersLocalRepositoryTest {
         val remindersUpdated = remindersRepository.getReminders() as Result.Success
         //Then the size equals 0
         assertThat(remindersUpdated.data.size, IsEqual(0))
+    }
+    @Test
+    fun errorHandling_passingRandomIdToDataSource() = runBlockingTest {
+        val reminders = remindersRepository.getReminders() as Result.Success
+        //Given that the dataBase isn't empty
+        assertThat(reminders.data.isEmpty(), IsEqual(false))
+        //When searching for random Id
+        val targetedId = UUID.randomUUID().toString()
+        val result = remindersRepository.getReminder(targetedId) as? Result.Error
+        //Then it should be returning result.error with message
+        assertThat(result.toString(),`is`("Reminder not found!"))
     }
 }
