@@ -1,6 +1,8 @@
 package com.udacity.project4.locationreminders.reminderslist
 
+import android.util.Log
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
+import androidx.room.Database
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.udacity.project4.locationreminders.data.FakeDataSource
@@ -75,5 +77,17 @@ class RemindersListViewModelTest {
         assertThat(reminderListViewModel.showLoading.getOrAwaitValue(), `is`(true))
     }
 
-
+    @Test
+    fun returningError() = runBlockingTest {
+        //Given a newly generated viewModel and a data source having an element
+        val remindersListViewModel =
+            RemindersListViewModel(ApplicationProvider.getApplicationContext(), dataSource)
+        remindersListViewModel.loadReminders()
+        //When data source is returning error
+        dataSource.saveReminder(exampleReminder)
+        dataSource.shouldReturnError(true)
+        //Then the Livedata is still sized 0 with no update on the newly added element
+        remindersListViewModel.loadReminders()
+        assertThat(remindersListViewModel.empty.getOrAwaitValue(), `is`(true))
+  }
 }
