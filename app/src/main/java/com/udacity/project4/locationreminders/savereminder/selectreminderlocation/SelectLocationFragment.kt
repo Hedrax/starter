@@ -4,6 +4,7 @@ package com.udacity.project4.locationreminders.savereminder.selectreminderlocati
 import android.Manifest
 import android.annotation.SuppressLint
 import android.annotation.TargetApi
+import android.app.Application
 import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
@@ -26,11 +27,15 @@ import com.udacity.project4.base.BaseFragment
 import com.udacity.project4.databinding.FragmentSelectLocationBinding
 import com.udacity.project4.locationreminders.savereminder.SaveReminderViewModel
 import com.udacity.project4.utils.setDisplayHomeAsUpEnabled
+import kotlinx.android.synthetic.main.fragment_save_reminder.*
 import org.koin.android.ext.android.inject
+import java.security.Permission
 
 class SelectLocationFragment : BaseFragment(),OnMapReadyCallback {
 
     private val latLngHome = LatLng(30.06485678718907, 31.218080233756442)
+    //variable to indicate whether we have access or not
+    private var locationPermissionGranted = false
     //Use Koin to get the view model of the SaveReminder
     override val _viewModel: SaveReminderViewModel by inject()
     private lateinit var binding: FragmentSelectLocationBinding
@@ -48,7 +53,8 @@ class SelectLocationFragment : BaseFragment(),OnMapReadyCallback {
 
         setHasOptionsMenu(true)
         setDisplayHomeAsUpEnabled(true)
-
+        //requesting permission
+        permissionHandling()
         //the Setup of the map
         val mapFragment = childFragmentManager
             .findFragmentById(R.id.map) as SupportMapFragment
@@ -67,17 +73,17 @@ class SelectLocationFragment : BaseFragment(),OnMapReadyCallback {
 
         return binding.root
     }
+
     override fun onMapReady(googleMap: GoogleMap) {
+        try {
         map = googleMap
         map.moveCamera(CameraUpdateFactory.newLatLngZoom(latLngHome,7F))
         setPoiClk(map)
         setOnClick(map)
         mapStyling(map)
-        enableMyLocation()
-    }
-    override fun onStart() {
-        super.onStart()
-        foregroundAndBackgroundLocationPermissionApproved()
+        }catch (e:Exception){
+            Log.i(TAG,"${e.message}")
+        }
     }
     //the fn handles what to be done when adding marker and update the location selected variable to
     //be added to the save reminder fragment
@@ -154,34 +160,66 @@ class SelectLocationFragment : BaseFragment(),OnMapReadyCallback {
                _viewModel.showSnackBarInt.value = R.string.location_required_error
         }
     }
-    //checks if we have access on location to navigate to location position
     @SuppressLint("MissingPermission")
-    private fun enableMyLocation() {
-        if (isPermissionGranted()) {
-            checkDeviceLocationSettings()
-            map.isMyLocationEnabled = true
-        }
-        else {
-            requestForeGroundLocationPermission()
+    private fun updateLocationUI() {
+        try {
+            if (locationPermissionGranted) {
+                map.isMyLocationEnabled = true
+                map.uiSettings?.isMyLocationButtonEnabled = true
+                checkDeviceLocationSettings()
+            } else {
+                map.isMyLocationEnabled = false
+                map.uiSettings?.isMyLocationButtonEnabled = false
+                permissionHandling()
+            }
+        } catch (e: SecurityException) {
+            Log.i("Exception: %s", e.message, e)
         }
     }
-    //Check if location permissions are granted and if so enable the location data layer.
+
     override fun onRequestPermissionsResult(
         requestCode: Int,
-        permissions: Array<out String>,
+        permissions: Array<String>,
         grantResults: IntArray
     ) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        if (requestCode == REQUEST_LOCATION_PERMISSION) {
-            enableMyLocation()
+        //handling the location permission when requested
+        if (requestCode == REQUEST_LOCATION_PERMISSION){
+            if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED ){
+                locationPermissionGranted = true
+                updateLocationUI()
+            }
+            else{
+                //showing error message when permission denied
+                _viewModel.showSnackBarInt.value = R.string.permission_denied_explanation
+            }
+        }
+
+    }
+
+    private fun permissionHandling(permission: String = Manifest.permission.ACCESS_FINE_LOCATION
+                                   , requestCode: Int = REQUEST_LOCATION_PERMISSION){
+        try{
+            //checks for permission, if not request it
+            if (isPermissionGranted()) {
+                // Update Location UI
+                locationPermissionGranted = true
+                updateLocationUI()
+            }else{
+                //Request permission
+                this.requestPermissions(arrayOf(permission), requestCode)
+            }
+        }catch (e:Exception){
+            Log.i(TAG,"${e.message}")
         }
     }
-    //permissions
- private fun isPermissionGranted() : Boolean {
-     return ContextCompat.checkSelfPermission(
+
+    //the fn checks for location if granted or not
+ private fun isPermissionGranted(
+     permission: String = Manifest.permission.ACCESS_FINE_LOCATION):Boolean {
+     return (ActivityCompat.checkSelfPermission(
          requireContext(),
-         Manifest.permission.ACCESS_FINE_LOCATION
-     ) == PackageManager.PERMISSION_GRANTED
+         permission) == PackageManager.PERMISSION_GRANTED)
  }
 //requests location ForeGround Permission
     private fun requestForeGroundLocationPermission(){
