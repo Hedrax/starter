@@ -7,9 +7,12 @@ import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
+import androidx.lifecycle.map
 import com.firebase.ui.auth.AuthUI
 import com.firebase.ui.auth.IdpResponse
+import com.google.firebase.FirebaseApp
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseUser
 import com.udacity.project4.R
 import com.udacity.project4.databinding.ActivityAuthenticationBinding
 import com.udacity.project4.locationreminders.RemindersActivity
@@ -20,6 +23,7 @@ import com.udacity.project4.locationreminders.RemindersActivity
  */
 class AuthenticationActivity : AppCompatActivity() {
     private lateinit var binding:ActivityAuthenticationBinding
+    private lateinit var firebaseAuth: FirebaseAuth
     companion object{
         const val SIGN_IN_CODE = 132
         private const val TAG = "AuthenticationActivity"
@@ -27,8 +31,11 @@ class AuthenticationActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_authentication)
+        firebaseAuth = FirebaseAuth(FirebaseApp.getInstance())
         binding.authButton.setOnClickListener {
-            signInFlow()
+            if (firebaseAuth.currentUser == null)
+                signInFlow()
+            else done()
         }
     }
 
@@ -59,7 +66,7 @@ class AuthenticationActivity : AppCompatActivity() {
                         FirebaseAuth.getInstance().currentUser?.displayName
                     }"
                 )
-                startActivity(Intent(this, RemindersActivity::class.java))
+                done()
                 finish()
             } else {
                 Toast.makeText(this, "SignIn Failed", Toast.LENGTH_SHORT).show()
@@ -67,4 +74,5 @@ class AuthenticationActivity : AppCompatActivity() {
             }
         }
     }
+    private fun done() = startActivity(Intent(this, RemindersActivity::class.java))
 }
