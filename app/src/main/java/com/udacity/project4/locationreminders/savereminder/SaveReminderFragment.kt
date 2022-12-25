@@ -58,6 +58,7 @@ class SaveReminderFragment : BaseFragment() {
                 //that when the flag is enabled
                 _viewModel.getLocation()?.let { it1 ->
                     addGeofence(it1)
+                    //Todo add append data after check and clear saveFlag if handled a failure
                 }
             }
         })
@@ -86,8 +87,10 @@ class SaveReminderFragment : BaseFragment() {
             val geofenceRequest: GeofencingRequest = geoBuilder.getGeofencingRequest(geofence)
             LocationServices.getGeofencingClient(context!!)
                 .addGeofences(geofenceRequest, pendingIntent)
-                .addOnSuccessListener{_viewModel.showToast.value = "Geofence Added"}
-                //Toast and Todo navigation
+                .addOnSuccessListener{
+                    _viewModel.showToast.value = "Geofence Added"
+                    _viewModel.appendData()
+                }
                 .addOnFailureListener{
                     Log.i(TAG, "Geofence Failed: $it")
                     _viewModel.showToast.value = "Give Location permission"
