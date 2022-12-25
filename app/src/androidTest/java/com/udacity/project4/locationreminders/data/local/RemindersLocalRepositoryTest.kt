@@ -1,17 +1,19 @@
 package com.udacity.project4.locationreminders.data.local
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
+import androidx.room.Room
+import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.filters.MediumTest
-import com.udacity.project4.fake.FakeDataSource
-import com.udacity.project4.fake.FakeReminderDAO
 import com.udacity.project4.locationreminders.data.dto.ReminderDTO
 import com.udacity.project4.locationreminders.data.dto.Result
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runBlockingTest
+import org.hamcrest.CoreMatchers.`is`
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.core.IsEqual
+import org.junit.After
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -33,23 +35,27 @@ class RemindersLocalRepositoryTest {
     private val localReminders = listOf(reminder1,reminder2,reminder3).sortedBy { it.id }
     private val newReminders = listOf(reminder1,reminder2,reminder3,reminderNew).sortedBy { it.id }
 
-    private lateinit var remindersLocalDataSource: FakeDataSource
+    private lateinit var database: RemindersDatabase
     private lateinit var remindersRepository: RemindersLocalRepository
-    private lateinit var reminderDao: FakeReminderDAO
     @Before
     fun repoCreation(){
-        remindersLocalDataSource = FakeDataSource(localReminders.toMutableList())
-        reminderDao = FakeReminderDAO()
+        database = Room.inMemoryDatabaseBuilder(
+            ApplicationProvider.getApplicationContext(),
+            RemindersDatabase::class.java
+        ).allowMainThreadQueries()
+            .build()
         remindersRepository = RemindersLocalRepository(
-            reminderDao,
+            database.reminderDao(),
             Dispatchers.Unconfined)
     }
+    @After
+    fun onClear() = database.close()
     @Test
     fun getReminder_requestsAllRemindersFromLocalDataSource() = runBlockingTest {
         // When we get the reminders from the Repo
         val reminders = remindersRepository.getReminders() as Result.Success
         // Then tasks are loaded from the ReminderDAO
-        assertThat(reminders.data, IsEqual(reminderDao.getReminders()))
+        assertThat(reminders.data, `is` (database.reminderDao().getReminders()))
     }
 
     @Test
