@@ -44,7 +44,6 @@ class SaveReminderViewModel(val app: Application, val dataSource: ReminderDataSo
     fun save() {
         showLoading.value = true
         if (checkValidity()) {
-            appendData()
             saveFlag.value = true
             _navigate.value = true
             onClear()
