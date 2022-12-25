@@ -37,7 +37,6 @@ class SaveReminderFragment : BaseFragment() {
     override val _viewModel: SaveReminderViewModel by inject()
     private lateinit var geoBuilder: GeofenceUtils
     private lateinit var binding: FragmentSaveReminderBinding
-    private var locationEnabled = false
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -48,21 +47,28 @@ class SaveReminderFragment : BaseFragment() {
         setDisplayHomeAsUpEnabled(true)
 
         binding.viewModel = _viewModel
-        _viewModel.navigate.observe(viewLifecycleOwner, androidx.lifecycle.Observer {
-            if (it) findNavController().navigateUp()
-        })
         geoBuilder = GeofenceUtils(context)
         //observer on saveFlag liveData when we're saving the data he will cause adding geofence
-        _viewModel.saveFlag.observe(viewLifecycleOwner, androidx.lifecycle.Observer {
-            if(it) {
+        _viewModel.saveFlag.observe(viewLifecycleOwner, androidx.lifecycle.Observer { it1 ->
+            if(it1) {
                 //that when the flag is enabled
-                _viewModel.getLocation()?.let { it1 ->
-                    addGeofence(it1)
+                //checking device settings at first
+                _viewModel.getLocation()?.let {
+                    if (permissionHandling()){
+                        Log.i(TAG,"Permission handling true")
+                        addGeofence(it)
+                    }
                     _viewModel.saveFlag.value = false
                 }
             }
         })
         return binding.root
+    }
+
+    override fun onStart() {
+
+        super.onStart()
+        checkDeviceLocationSettings()
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -71,11 +77,6 @@ class SaveReminderFragment : BaseFragment() {
 
     }
 
-    override fun onDestroy() {
-        super.onDestroy()
-        //make sure to clear the view model after destroy, as it's a single view model.
-        _viewModel.onClear()
-    }
     //fn that adds the geofence it gives a log and toast in case of failure
     @SuppressLint("MissingPermission")
     private fun addGeofence(latLng: LatLng,radius: Float = 200f) {
@@ -87,9 +88,13 @@ class SaveReminderFragment : BaseFragment() {
             val geofenceRequest: GeofencingRequest = geoBuilder.getGeofencingRequest(geofence)
             LocationServices.getGeofencingClient(context!!)
                 .addGeofences(geofenceRequest, pendingIntent)
-                .addOnSuccessListener{
-                    _viewModel.showToast.value = "Geofence Added"
-                    _viewModel.appendData()
+                .addOnCompleteListener{
+                    if(it.isSuccessful){
+                        Log.i(TAG, "Added geoFence Successfully")
+                        _viewModel.showToast.value = "Geofence Added"
+                        _viewModel.showSnackBar.value = "Geofences Added"
+                        _viewModel.appendData()
+                    }
                 }
                 .addOnFailureListener{
                     Log.i(TAG, "Geofence Failed: $it")
@@ -146,8 +151,7 @@ class SaveReminderFragment : BaseFragment() {
             settingsClient.checkLocationSettings(requestBuilder.build())
         //request handling to recheck permissions
         settingsResponse.addOnCompleteListener{
-            locationEnabled = true
-            permissionHandling()
+            _viewModel.locationEnabled = true
         }
         settingsResponse.addOnFailureListener {
             _viewModel.showSnackBarInt.value = R.string.location_required_error
@@ -162,32 +166,36 @@ class SaveReminderFragment : BaseFragment() {
             permission = Manifest.permission.ACCESS_FINE_LOCATION
             requestCode = REQUEST_LOCATION_PERMISSION
             if (!isPermissionGranted(permission)) {
+                Log.i(TAG, "Already Foreground permission granted")
                 this.requestPermissions(arrayOf(permission), requestCode)
                 return false
             }
         }catch (e:Exception){
-            Log.i(SelectLocationFragment.TAG,"${e.message}")
+            Log.i(SelectLocationFragment.TAG,"ForeGround request: ${e.message}")
         }
         if(Build.VERSION.SDK_INT > 28) {
             try {
                 permission = Manifest.permission.ACCESS_BACKGROUND_LOCATION
                 requestCode = REQUEST_BACKGROUND_LOCATION
                 if (!isPermissionGranted(permission)) {
+                    Log.i(TAG, "Already BackGround permission granted")
                     this.requestPermissions(arrayOf(permission), requestCode)
                     return false
                 }
             } catch (e: Exception) {
-                Log.i(SelectLocationFragment.TAG, "${e.message}")
+                Log.i(SelectLocationFragment.TAG, "BackGround permission handling${e.message}")
             }
         }
         try {
-            if (!locationEnabled)
+
+            if (!_viewModel.locationEnabled)
             {
                 checkDeviceLocationSettings()
+                Log.i(TAG, "Location Device is Not enabled")
                 return false
             }
         }catch (e:Exception){
-            Log.i(SelectLocationFragment.TAG,"${e.message}")
+            Log.i(SelectLocationFragment.TAG,"Device Location handling${e.message}")
         }
         return true
     }

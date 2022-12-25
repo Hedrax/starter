@@ -22,6 +22,7 @@ class SaveReminderViewModel(val app: Application, val dataSource: ReminderDataSo
     val positionStr: String
         get() = selectedPosition.value?.title.toString()
     val saveFlag = MutableLiveData<Boolean>()
+    var locationEnabled = false
     private val _navigate = MutableLiveData<Boolean>(false)
     val navigate: LiveData<Boolean>
         get() = _navigate
@@ -45,8 +46,6 @@ class SaveReminderViewModel(val app: Application, val dataSource: ReminderDataSo
         showLoading.value = true
         if (checkValidity()) {
             saveFlag.value = true
-            _navigate.value = true
-            onClear()
         }
     }
     //fn to receive the incoming selected position from location selection fragment
@@ -83,6 +82,7 @@ class SaveReminderViewModel(val app: Application, val dataSource: ReminderDataSo
             ))
         }
         showLoading.value = false
+        onClear()
         navigationCommand.value = NavigationCommand.Back
     }
     //navigation fn
