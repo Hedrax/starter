@@ -1,11 +1,18 @@
 package com.udacity.project4
 
 import android.app.Application
+import android.service.autofill.Validators.not
 import androidx.test.core.app.ActivityScenario
 import androidx.test.core.app.ApplicationProvider.getApplicationContext
+import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.IdlingRegistry
+import androidx.test.espresso.action.ViewActions.*
+import androidx.test.espresso.assertion.ViewAssertions.matches
+import androidx.test.espresso.matcher.RootMatchers.withDecorView
+import androidx.test.espresso.matcher.ViewMatchers.*
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.filters.LargeTest
+import com.google.android.material.internal.ContextUtils.getActivity
 import com.udacity.project4.locationreminders.RemindersActivity
 import com.udacity.project4.locationreminders.data.ReminderDataSource
 import com.udacity.project4.locationreminders.data.dto.ReminderDTO
@@ -17,7 +24,9 @@ import com.udacity.project4.locationreminders.savereminder.SaveReminderViewModel
 import com.udacity.project4.util.DataBindingIdlingResource
 import com.udacity.project4.util.monitorActivity
 import com.udacity.project4.utils.EspressoIdlingResource
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.runBlocking
+import org.hamcrest.CoreMatchers.`is`
 import org.junit.After
 import org.junit.Before
 import org.junit.Test
@@ -89,5 +98,22 @@ class RemindersActivityTest :
         IdlingRegistry.getInstance().unregister(EspressoIdlingResource.countingIdlingResource)
         IdlingRegistry.getInstance().unregister(dataBindingIdlingResource)
     }
+    @ExperimentalCoroutinesApi
+    @Test
+    fun snackBarTest_whenSavingWithoutInfo() = runBlocking{
+        // GIVEN Starting fresh activity
+        val scenario = ActivityScenario.launch(RemindersActivity::class.java)
+        dataBindingIdlingResource.monitorActivity(scenario)
+        // WHEN - We begin entering information for the reminder.
+        onView(withId(R.id.addReminderFAB)).perform(click())
+        onView(withId(R.id.save_button)).perform(click())
+        //Then it will show a snackBar telling missing title
+        onView(withText(R.string.missing_title)).check(matches(isDisplayed()))
 
+        //when adding location title and trying to save
+        onView(withId(R.id.reminderTitle)).perform(typeText("Location1"), closeSoftKeyboard())
+        onView(withId(R.id.save_button)).perform(click())
+        //Then it will display a snackBar telling missing location
+        onView(withText(R.string.missing_location)).check(matches(isDisplayed()))
+    }
 }
