@@ -80,8 +80,8 @@ class SaveReminderFragment : BaseFragment() {
                 .addGeofences(geofenceRequest, pendingIntent)
                 .addOnCompleteListener{
                     if(it.isSuccessful){
-                        _viewModel.showToast.value = "Geofence Added"
-                        _viewModel.showSnackBar.value = "Geofences Added"
+                        _viewModel.showToast.value = getString(R.string.geofence_added)
+                        _viewModel.showSnackBarInt.value = R.string.geofences_added
                         _viewModel.appendData()
                     }
                 }

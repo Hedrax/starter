@@ -43,4 +43,6 @@
     <string name="missing_title">Missing Title</string>
     <string name="missing_location">Please select position first</string>
     <string name="background_Error">Background Location permission is required to initiate geofence</string>
+    <string name="geofence_added">Geofence Added</string>
+    <string name="geofences_added">Geofences Added</string>
 </resources>

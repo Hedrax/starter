@@ -116,4 +116,24 @@ class RemindersActivityTest :
         //Then it will display a snackBar telling missing location
         onView(withText(R.string.missing_location)).check(matches(isDisplayed()))
     }
+
+    @ExperimentalCoroutinesApi
+    @Test
+    fun toastTest_whenSaving() = runBlocking{
+        // Given Starting fresh activity
+        val scenario = ActivityScenario.launch(RemindersActivity::class.java)
+        dataBindingIdlingResource.monitorActivity(scenario)
+        onView(withId(R.id.addReminderFAB)).perform(click())
+        // When  save reminder frag
+        onView(withId(R.id.reminderTitle)).perform(typeText("Location1"), closeSoftKeyboard())
+        onView(withId(R.id.selectLocation)).perform(click())
+        //When map frag
+        onView(withId(R.id.map)).perform(click())
+        onView(withId(com.google.android.material.R.id.snackbar_action)).perform(click())
+        onView(withId(R.id.save_button)).perform(click())
+        //When Save frag
+        onView(withId(R.id.saveReminder)).perform(click())
+        //Then we will move back to list fragment and the Toast should've been shown
+        onView(withText(R.string.geofence_added)).check(matches(isDisplayed()))
+    }
 }
