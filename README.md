@@ -26,12 +26,12 @@ _This project was made within the Android Nanodegree_
 * [Android Jetpack WorkManager library](https://developer.android.com/jetpack/androidx/releases/work) ([JobIntentService](https://developer.android.com/reference/androidx/core/app/JobIntentService))
 ## ScreenShots
 <p>
-<img name="login welcoming" src="https://github.com/Hedrax/starter/blob/main/screenshots/Screenshot_2023-02-04-03-41-21-025_com.udacity.project4.jpg"  width="33%" height="12%">
-<img name="login selection" src="https://github.com/Hedrax/starter/blob/main/screenshots/Screenshot_2023-02-04-03-41-27-782_com.udacity.project4.jpg"  width="33%" height="12%">
-<img name="map starting screen" src="https://github.com/Hedrax/starter/blob/main/screenshots/Screenshot_2023-02-04-03-43-05-671_com.udacity.project4.jpg"  width="33%" height="12%">
+<img name="login welcoming" src="https://github.com/Hedrax/starter/blob/main/screenshots/Screenshot_2023-02-04-03-41-21-025_com.udacity.project4.jpg"  width="30%" height="10%">
+<img name="login selection" src="https://github.com/Hedrax/starter/blob/main/screenshots/Screenshot_2023-02-04-03-41-27-782_com.udacity.project4.jpg"  width="30%" height="10%">
+<img name="map starting screen" src="https://github.com/Hedrax/starter/blob/main/screenshots/Screenshot_2023-02-04-03-43-05-671_com.udacity.project4.jpg"  width="30%" height="10%">
 <p>
 <p>
-<img name="map after selection" src="https://github.com/Hedrax/starter/blob/main/screenshots/Screenshot_2023-02-04-03-43-43-694_com.udacity.project4.jpg"  width="33%" height="12%">
-<img name="detail screen" src="https://github.com/Hedrax/starter/blob/main/screenshots/Screenshot_2023-02-04-03-43-47-656_com.udacity.project4.jpg"  width="33%" height="12%">
-<img name="list screen" src="https://github.com/Hedrax/starter/blob/main/screenshots/Screenshot_2023-02-04-03-44-01-546_com.udacity.project4.jpg"  width="33%" height="12%">
+<img name="map after selection" src="https://github.com/Hedrax/starter/blob/main/screenshots/Screenshot_2023-02-04-03-43-43-694_com.udacity.project4.jpg"  width="30%" height="10%">
+<img name="detail screen" src="https://github.com/Hedrax/starter/blob/main/screenshots/Screenshot_2023-02-04-03-43-47-656_com.udacity.project4.jpg"  width="30%" height="10%">
+<img name="list screen" src="https://github.com/Hedrax/starter/blob/main/screenshots/Screenshot_2023-02-04-03-44-01-546_com.udacity.project4.jpg"  width="30%" height="10%">
 <p>
