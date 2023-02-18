@@ -1,5 +1,5 @@
 # Location Reminder
-It's a TODO list application with a location feature that reminders the user 
+It is a TO-DO list application with a location feature that reminds the user 
 with actions associated with a location of his choice when he's in the surrounding area.\
 _This project was made within the Android Nanodegree_
 ## Project's KeyPoints
